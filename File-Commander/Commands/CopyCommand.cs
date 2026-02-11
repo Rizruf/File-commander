@@ -26,7 +26,7 @@ namespace File_Commander.Commands
 
             if (File.Exists(sourcePath))
             {
-                Console.WriteLine("Ошибка: Фаил не найден!"); return;
+                Console.WriteLine("Ошибка: Фаил уже существует!"); return;
             }
 
             try

@@ -16,7 +16,6 @@ namespace File_Commander.Core
         {
             Register(new HelpCommand());
             Register(new CopyCommand());
-            Register(new DeleteCommand());
 
             var listCmd = new LsCommand();
             Register(listCmd);
