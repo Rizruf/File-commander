@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using File_Commander.Interfaces;
+﻿using File_Commander.Interfaces;
 
 namespace File_Commander.Commands
 {
@@ -14,9 +9,12 @@ namespace File_Commander.Commands
 
         public void Execute(string[] args)
         {
-            Console.WriteLine("Доступные команды:");
-            Console.WriteLine("help - Помощь");
-            Console.WriteLine("ls/dir - Информация о содержании пространства");
+            Console.WriteLine("\n Доступные команды: \n");
+            Console.WriteLine("1. help - Помощь\n");
+            Console.WriteLine("2. rm/del - Удаление файла\n");
+            Console.WriteLine("4. info - Информация о файле\n");
+            Console.WriteLine("4. cp - Копирование файла\n");
+            Console.WriteLine("5. dir/ls - Информация о содержании пространства папок и файлов\n");
         }
     }
 }

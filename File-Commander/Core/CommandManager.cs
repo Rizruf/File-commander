@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using File_Commander.Commands;
+﻿using File_Commander.Commands;
 using File_Commander.Interfaces;
 
 namespace File_Commander.Core
@@ -16,6 +11,7 @@ namespace File_Commander.Core
         {
             Register(new HelpCommand());
             Register(new CopyCommand());
+            Register(new InfoCommand());
 
             var listCmd = new LsCommand();
             Register(listCmd);

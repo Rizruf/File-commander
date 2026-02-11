@@ -1,51 +1,63 @@
 ﻿using File_Commander.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace File_Commander.Commands
 {
     internal class DeleteCommand : ICommand
     {
         public string Name => "rm";
-
-        public string Description => "Удаление файла. Использование: rm <файл>";
+        public string Description => "Удаляет файл или папку. Использование: rm <путь>";
 
         public void Execute(string[] args)
         {
             if (args.Length != 1)
             {
-                Console.WriteLine("Ошибка: нужен 1 аргумент");
+                Console.WriteLine("Ошибка: Укажите путь к файлу или папке.");
                 return;
             }
 
-            var sourcePath = args[0];
+            string path = args[0];
 
-            if (!File.Exists(sourcePath))
+            bool isDir = Directory.Exists(path);
+            bool isFile = File.Exists(path);
+
+            if (!isDir && !isFile)
             {
-                Console.WriteLine("Такого фаила не существует!");
+                Console.WriteLine($"Ошибка: '{path}' не найден.");
                 return;
             }
 
-            Console.Write($"Удалить {sourcePath}? [y/n]: ");
+            Console.Write($"Вы уверены, что хотите удалить '{path}'? [y/n]: ");
             string answer = Console.ReadLine();
-            if (answer.ToLower() != "y") return;
+            if (answer?.ToLower() != "y")
+            {
+                Console.WriteLine("Отмена.");
+                return;
+            }
 
             try
             {
-                File.Delete(sourcePath);
-                Console.WriteLine($"Успешно удалено: {sourcePath}");
+                if (isDir)
+                {
+                    Directory.Delete(path, recursive: true);
+                    Console.WriteLine($"Папка '{path}' удалена.");
+                }
+                else
+                {
+                    File.Delete(path);
+                    Console.WriteLine($"Файл '{path}' удален.");
+                }
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine("У вас не достаточно прав доступа");
+                Console.WriteLine("Ошибка: Нет прав доступа (попробуй запустить от Админа).");
             }
             catch (IOException ex)
             {
-                Console.WriteLine("Ошибка ввода, файл возможно занят");
+                Console.WriteLine($"Ошибка ввода-вывода: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Неизвестная ошибка: {ex.Message}");
             }
         }
     }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using File_Commander.Interfaces;
-using File_Commander.Commands;
+﻿using File_Commander.Interfaces;
 
 namespace File_Commander.Commands
 {

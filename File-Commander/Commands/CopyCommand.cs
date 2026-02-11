@@ -1,46 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using File_Commander.Interfaces;
+﻿using File_Commander.Interfaces;
 
 namespace File_Commander.Commands
 {
     internal class CopyCommand : ICommand
     {
         public string Name => "cp";
-
-        public string Description => "Копирование файла. Использование: cp <откуда> <куда>";
+        public string Description => "Копирует файл или папку. Использование: cp <откуда> <куда>";
 
         public void Execute(string[] args)
         {
             if (args.Length < 2)
             {
-                Console.WriteLine("Ошибка: Меньше 2 аргументов");
+                Console.WriteLine("Ошибка: Укажите источник и назначение.");
                 return;
             }
 
-            var sourcePath = args[0];
-            var targetPath = args[1];
+            string source = args[0];
+            string target = args[1];
 
-            if (File.Exists(sourcePath))
+            bool isSourceDir = Directory.Exists(source);
+            bool isSourceFile = File.Exists(source);
+
+            if (!isSourceDir && !isSourceFile)
             {
-                Console.WriteLine("Ошибка: Фаил уже существует!"); return;
+                Console.WriteLine($"Ошибка: Источник '{source}' не найден.");
+                return;
+            }
+
+            if (Directory.Exists(target) || File.Exists(target))
+            {
+                Console.WriteLine($"Ошибка: Цель '{target}' уже существует!");
+                return;
             }
 
             try
             {
-                File.Copy(sourcePath, targetPath, overwrite: true);
-                Console.WriteLine($"Успешно скопировано: {sourcePath} -> {targetPath}");
+                if (isSourceFile)
+                {
+                    File.Copy(source, target);
+                    Console.WriteLine($"Файл скопирован: {target}");
+                }
+                else
+                {
+                    Console.WriteLine("Копирование папки... Это может занять время.");
+                    CopyDirectory(source, target, recursive: true);
+                    Console.WriteLine($"Папка успешно скопирована: {target}");
+                }
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine("У вас не достаточно прав доступа");
+                Console.WriteLine("Ошибка: Нет прав доступа.");
             }
             catch (IOException ex)
             {
-                Console.WriteLine("Ошибка ввода, файл возможно занят");
+                Console.WriteLine($"Ошибка ввода-вывода: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+        }
+
+        private static void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
+        {
+            var dir = new DirectoryInfo(sourceDir);
+
+            Directory.CreateDirectory(destinationDir);
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                file.CopyTo(targetFilePath);
+            }
+
+            if (recursive)
+            {
+                foreach (DirectoryInfo subDir in dir.GetDirectories())
+                {
+                    string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                    CopyDirectory(subDir.FullName, newDestinationDir, true);
+                }
             }
         }
     }
