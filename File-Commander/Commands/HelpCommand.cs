@@ -15,6 +15,8 @@ namespace File_Commander.Commands
             Console.WriteLine("4. info - Информация о файле\n");
             Console.WriteLine("4. cp - Копирование файла\n");
             Console.WriteLine("5. dir/ls - Информация о содержании пространства папок и файлов\n");
+            Console.WriteLine("6. touch - Создать файл (-f) или папку (-d). Пример: touch -f file.txt\n");
+
         }
     }
 }
