@@ -15,11 +15,26 @@ namespace File_Commander.Core
         public CommandManager()
         {
             Register(new HelpCommand());
+            Register(new CopyCommand());
+            Register(new DeleteCommand());
+
+            var listCmd = new LsCommand();
+            Register(listCmd);
+            RegisterAlias("ls", listCmd);
+
+            var delCmd = new DeleteCommand();
+            Register(delCmd);
+            RegisterAlias("del", delCmd);
         }
 
         public void Register(ICommand command)
         {
             _commands.Add(command.Name, command);
+        }
+
+        public void RegisterAlias(string alias, ICommand command)
+        {
+            _commands.Add(alias, command);
         }
 
         public void Run()

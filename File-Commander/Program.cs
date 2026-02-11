@@ -8,8 +8,6 @@ namespace File_Commander
     {
         static void Main(string[] args)
         {
-            ICommand cmd = new HelpCommand();
-
             new CommandManager().Run();
         }
     }

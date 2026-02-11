@@ -16,6 +16,7 @@ namespace File_Commander.Commands
         {
             Console.WriteLine("Доступные команды:");
             Console.WriteLine("help - Помощь");
+            Console.WriteLine("ls/dir - Информация о содержании пространства");
         }
     }
 }
